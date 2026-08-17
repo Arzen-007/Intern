@@ -1,0 +1,28 @@
+# Dependencies
+**/node_modules/
+
+# Environment files and local secrets
+.env
+.env.*
+!.env.example
+
+# Build and test output
+**/dist/
+**/build/
+**/coverage/
+**/.next/
+**/out/
+
+# Runtime and local files
+*.log
+*.pid
+*.seed
+*.sqlite
+*.sqlite3
+*.db
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

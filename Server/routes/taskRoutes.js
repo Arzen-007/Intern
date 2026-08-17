@@ -24,6 +24,12 @@ router.use(protect);
 router.get('/', getTasks);
 
 /**
+ * GET /api/tasks/intern/:internId - Get all tasks for specific intern
+ * Only admins and superadmins
+ */
+router.get('/intern/:internId', authorize('admin', 'superadmin'), getInternTasks);
+
+/**
  * GET /api/tasks/:id - Get single task by ID
  * Interns can view their own tasks
  * Admins can view any task
@@ -54,11 +60,5 @@ router.patch('/:id/status', updateTaskStatus);
  * Only admins and superadmins
  */
 router.delete('/:id', authorize('admin', 'superadmin'), deleteTask);
-
-/**
- * GET /api/tasks/intern/:internId - Get all tasks for specific intern
- * Only admins and superadmins
- */
-router.get('/intern/:internId', authorize('admin', 'superadmin'), getInternTasks);
 
 module.exports = router;

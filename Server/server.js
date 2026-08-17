@@ -16,7 +16,19 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+const allowedOrigins = (process.env.CLIENT_ORIGINS || 'http://localhost:5173')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('Origin is not allowed by CORS'));
+  }
+}));
 app.use(express.json());
 
 app.get('/api/health', (req, res) => {
@@ -41,7 +53,9 @@ const startServer = async () => {
   try {
     await sequelize.connectDB();
     await sequelize.sync();
-    await bootstrapDemoData();
+    if (process.env.SEED_DEMO_DATA === 'true') {
+      await bootstrapDemoData();
+    }
 
     app.listen(PORT, () => {
       console.log(`✅ Server running on port ${PORT}`);
