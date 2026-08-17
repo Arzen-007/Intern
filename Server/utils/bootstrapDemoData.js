@@ -19,24 +19,29 @@ const ensureUser = async ({ name, email, password, role }) => {
 };
 
 const bootstrapDemoData = async () => {
+  const demoPassword = process.env.DEMO_USER_PASSWORD;
+  if (!demoPassword || demoPassword.length < 12) {
+    throw new Error('DEMO_USER_PASSWORD must be set to at least 12 characters when SEED_DEMO_DATA=true');
+  }
+
   const superAdmin = await ensureUser({
     name: 'Super Admin',
-    email: 'Superadmin@intern.com',
-    password: 'password',
+    email: process.env.DEMO_SUPERADMIN_EMAIL || 'superadmin@intern.local',
+    password: demoPassword,
     role: 'superadmin'
   });
 
   const admin = await ensureUser({
     name: 'Admin User',
-    email: 'admin@intern.com',
-    password: 'password',
+    email: process.env.DEMO_ADMIN_EMAIL || 'admin@intern.local',
+    password: demoPassword,
     role: 'admin'
   });
 
   const intern = await ensureUser({
     name: 'Intern User',
-    email: 'intern@intern.com',
-    password: 'password',
+    email: process.env.DEMO_INTERN_EMAIL || 'intern@intern.local',
+    password: demoPassword,
     role: 'intern'
   });
 
